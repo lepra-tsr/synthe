@@ -1,6 +1,26 @@
 'use strict';
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Container from './Container.jsx';
+import Instruments from './Instulments.js';
+
 window.onload = () => {
+
+  /* vender-prefix fallback */
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  navigator.getUserMedia =
+    navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia;
+
+  Instruments.init();
+  Instruments.connect()
+    .then(() => {
+      const container = document.getElementById('container');
+      ReactDOM.render(<Container/>, container);
+    });
+
   return false;
 
   /* vender-prefix fallback */
@@ -19,18 +39,19 @@ window.onload = () => {
   const gcx = $graph.getContext('2d');
 
   const a = {
+    ctx: void 0,
     src: {
-      micSrc: void 0,
-      fileSrc: void 0,
-      sineSrc: void 0,
-      squareSrc: void 0,
+      mic: void 0,
+      file: void 0,
+      sine: void 0,
+      square: void 0,
     },
     gain: {
-      micGain: void 0,
-      fileGain: void 0,
-      sineGain: void 0,
-      squareGain: void 0,
-      mGain: void 0,
+      mic: void 0,
+      file: void 0,
+      sine: void 0,
+      square: void 0,
+      master: void 0,
     },
     filter: {
       lpf: void 0,

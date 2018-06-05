@@ -7,7 +7,7 @@ import Effectors from './Effectors.jsx';
 class Container extends React.Component {
   render() {
     return (
-      <div name="container">
+      <div>
         <Sources/>
         <Filters/>
         <Effectors/>

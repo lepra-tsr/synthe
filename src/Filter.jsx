@@ -10,6 +10,7 @@ class Filter extends React.Component {
     return (
       <label>
         <input type="radio" name="filter"
+               onChange={()=>{}}
                value={this.props.type}
                checked={this.props.checked}
         />
