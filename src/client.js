@@ -1,6 +1,7 @@
 'use strict';
 
 window.onload = () => {
+  return false;
 
   /* vender-prefix fallback */
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -16,6 +17,36 @@ window.onload = () => {
   const WIDTH = $graph.width;
   const HEIGHT = $graph.height;
   const gcx = $graph.getContext('2d');
+
+  const a = {
+    src: {
+      micSrc: void 0,
+      fileSrc: void 0,
+      sineSrc: void 0,
+      squareSrc: void 0,
+    },
+    gain: {
+      micGain: void 0,
+      fileGain: void 0,
+      sineGain: void 0,
+      squareGain: void 0,
+      mGain: void 0,
+    },
+    filter: {
+      lpf: void 0,
+      hpf: void 0,
+    },
+    effector: {
+      distortion: void 0,
+      vibrato: void 0,
+      delay: void 0,
+      bitCrash: void 0,
+    },
+    finisher: {
+      comp: void 0,
+    },
+  };
+
 
   const audio = {
     ctx,
@@ -33,39 +64,56 @@ window.onload = () => {
   };
   Object.seal(graph);
 
-  // let media = (() => {
-  //   const p = new Promise((resolve, reject) => {
-  //     const constraint = {
-  //       audio: true,
-  //       video: false,
-  //     }
-  //     navigator.getUserMedia(constraint, resolve, reject);
-  //   })
-  //   return p;
-  // })();
-  // media
-  //   .then((stream) => {
-  //     const { ctx } = audio;
-  //     const mic = ctx.createMediaStreamSource(stream);
-  //     mic.connect(ctx.destination);
-  //     const $success = document.createElement('SPAN');
-  //     $success.textContent = 'CONNECTED';
-  //     $container.appendChild($success);
-  //     Object.assign(audio, { mic })
-  //   })
-  //   .catch((e) => {
-  //     const $error = document.createElement('SPAN');
-  //     $error.textContent = 'MIC DEVICE NOT FOUND';
-  //     $container.appendChild($error);
-  //     Object.assign(audio, { mic })
-  //     console.error(e);
-  //   })
+  let media = (() => {
+    const p = new Promise((resolve, reject) => {
+      const constraint = {
+        audio: true,
+        video: false,
+      };
+      navigator.getUserMedia(constraint, resolve, reject);
+    });
+    return p;
+  })();
+  media
+    .then((stream) => {
+      const { ctx } = audio;
+      const mic = ctx.createMediaStreamSource(stream);
+      mic.connect(ctx.destination);
+      const $success = document.createElement('SPAN');
+      $success.textContent = 'CONNECTED';
+      $container.appendChild($success);
+      /* gain */
+      const g = ctx.createGain();
+      g.gain.value = 0.005;
 
-  /* start */
-  const $start = document.createElement('INPUT');
-  $start.type = 'button';
-  $start.value = 'start';
-  $container.appendChild($start);
+      /* mute */
+      const m = ctx.createGain();
+      m.gain.value = 1;
+
+      /* analyser */
+      const a = ctx.createAnalyser();
+
+      mic.connect(g);
+      g.connect(m);
+      m.connect(a);
+      a.connect(ctx.destination);
+      // m.connect(ctx.destination);
+
+      $start.disabled = true;
+
+      // Object.assign(audio, { o, g, m, a })
+      audio.g = g;
+      audio.m = m;
+      audio.a = a;
+      audio.mic = mic;
+    })
+    .catch((e) => {
+      const $error = document.createElement('SPAN');
+      $error.textContent = 'MIC DEVICE NOT FOUND';
+      $container.appendChild($error);
+      console.error(e);
+    });
+
 
   /* draw */
   const $draw = document.createElement('INPUT');
@@ -143,42 +191,6 @@ window.onload = () => {
   $hRangeDiv.appendChild($hRangeVal);
   $container.appendChild($hRangeDiv);
 
-  /* functions */
-  const start = () => {
-
-    /* oscillator */
-    const o = ctx.createOscillator();
-    o.type = 'sine';
-    o.frequency.value = 440;
-
-    /* gain */
-    const g = ctx.createGain();
-    g.gain.value = 0.005;
-
-    /* mute */
-    const m = ctx.createGain();
-    m.gain.value = 1;
-
-    /* analyser */
-    const a = ctx.createAnalyser();
-
-    o.connect(g);
-    g.connect(m);
-    m.connect(a);
-    a.connect(ctx.destination);
-    // m.connect(ctx.destination);
-
-    o.start();
-
-    $start.disabled = true;
-
-    // Object.assign(audio, { o, g, m, a })
-    audio.o = o;
-    audio.g = g;
-    audio.m = m;
-    audio.a = a;
-  };
-
   const draw = () => {
     const { a } = audio;
     const { vM = 2.0, hM = 1.0 } = graph;
@@ -203,7 +215,9 @@ window.onload = () => {
     gcx.lineTo(WIDTH, HEIGHT / 2);
     gcx.strokeStyle = 'rgba(216,216,255,0.5)';
     for (let i_b = 0; i_b < bLength; i_b++) {
-      if (i_b % 50 !== 0) continue;
+      if (i_b % 50 !== 0) {
+        continue;
+      }
 
       x = i_b * sliceWidth;
       gcx.moveTo(x, 0);
@@ -231,11 +245,6 @@ window.onload = () => {
     gcx.lineTo(WIDTH, HEIGHT / 2);
     gcx.stroke();
   };
-
-  /* starter */
-  $start.addEventListener('click', (e) => {
-    start();
-  });
 
   /* make graph */
   $draw.addEventListener('click', (e) => {
