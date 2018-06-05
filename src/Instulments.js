@@ -5,6 +5,7 @@ class Instruments {
     const I = Instruments;
     const ctx = I.getCtx();
     const gainMic = I.getGainMic();
+    const lpf = I.getLpf();
     const gainMaster = I.getGainMaster();
     const comp = I.getComp();
     const micP = I.attachMic();
@@ -12,11 +13,13 @@ class Instruments {
       .then(() => {
         const mic = I.getSrcMic();
         mic.connect(gainMic);
-        gainMic.connect(gainMaster);
+        gainMic.connect(lpf);
+        lpf.connect(gainMaster);
         gainMaster.connect(comp);
         comp.connect(ctx.destination);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e);
         console.warn('mic not found!');
       });
   }
@@ -137,6 +140,17 @@ class Instruments {
   }
 
   static getLpf() {
+    if (Instruments.filter.lpf) {
+      return Instruments.filter.lpf;
+    }
+    const ctx = Instruments.getCtx();
+    const lpf = ctx.createBiquadFilter();
+    lpf.type = 'highshelf';
+    lpf.frequency.setValueAtTime(2000, ctx.currentTime);
+    lpf.gain.setValueAtTime(-25, ctx.currentTime);
+
+    Instruments.filter.lpf = lpf;
+    return lpf;
   }
 
   static getHpf() {
