@@ -5,7 +5,6 @@ import Instruments from './Instulments';
 class Lpf extends React.Component {
   constructor(props) {
     super(props);
-    this.config =
   }
 
   render() {
@@ -17,17 +16,17 @@ class Lpf extends React.Component {
                  }}
                  checked={this.props.checked}
           />
-          <span>LPF(high shelf biquad filter)</span>
+          <span>LPF(high shelf reducer)</span>
         </label>
         <label>
           <span>frequency</span>
           <input type="range"
                  onChange={() => {
                  }}
-                 min={this.props.freq.min}
-                 max={this.props.freq.max}
-                 step={this.props.freq.step}
-                 value={this.props.freq.value}
+                 min="10"
+                 max="2000"
+                 step="50"
+                 value="1500"
           />
         </label>
         <label>
@@ -35,14 +34,14 @@ class Lpf extends React.Component {
           <input type="range"
                  onChange={(e) => {
                    const v = parseFloat(e.target.value);
-                   const gainMic = Instruments.getGainMic();
+                   const lpf = Instruments.getLpf();
                    const ctx = Instruments.getCtx();
-                   gainMic.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+                   lpf.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
                  }}
-                 min={this.props.config.min}
-                 max={this.props.config.max}
-                 step={this.props.config.step}
-                 value={this.props.config.value}
+                 min="-25"
+                 max="0"
+                 step="1"
+                 value="-20"
           />
         </label>
       </div>
