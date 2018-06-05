@@ -1,5 +1,9 @@
 import React from 'react';
 import Instruments from './Instulments.js';
+import {
+  Checkbox,
+  Slider,
+} from '@blueprintjs/core';
 
 class MasterGain extends React.Component {
   constructor(props) {
@@ -8,35 +12,29 @@ class MasterGain extends React.Component {
       ctx: Instruments.getCtx(),
       gain: Instruments.getGainMaster(),
     };
-    this.config = { min: 0.1, max: 1, step: 0.1 };
+    this.config = { min: 0.01, max: 1, stepSize: 0.01, };
+    this.state = {
+      gain: this.audio.gain.gain.value
+    };
   }
 
   render() {
     return (
       <div name='master'>
-        <label>
-          <input
-            type="checkbox"
-            onChange={() => {
-            }}
-            checked={this.props.active}
-          />
-          <span>master: </span>
-        </label>
-        <label>
-          <span>gain</span>
-          <input type="range"
-                 onChange={(e) => {
-                   const v = parseFloat(e.target.value);
-                   const { ctx, gain } = this.audio;
-                   gain.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
-                 }}
-                 min={this.config.min}
-                 max={this.config.max}
-                 step={this.config.step}
-                 value={this.audio.gain.value}
-          />
-        </label>
+        <Checkbox checked={this.props.active} label="マスタ" onChange={() => {
+        }}/>
+        <Slider min={this.config.min}
+                max={this.config.max}
+                stepSize={this.config.stepSize}
+                value={this.state.gain}
+                style={{ width: '100%' }}
+                onChange={(e) => {
+                  const v = parseFloat(e);
+                  const { ctx, gain } = this.audio;
+                  gain.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+                  this.setState({ gain: v });
+                }}
+        />
       </div>
     );
   }

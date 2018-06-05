@@ -7,7 +7,7 @@ class Filters extends React.Component {
   render() {
     return (
       <div name="filters">
-        <h5>filters</h5>
+        <h5>フィルタ</h5>
         <Lpf type={'lpf'} checked={false}/>
         <Filter type={"hpf"} checked={false}/>
       </div>

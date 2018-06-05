@@ -6,7 +6,7 @@ class Effectors extends React.Component {
   render() {
     return (
       <div name="effectors">
-        <h5>effectors</h5>
+        <h5>エフェクタ</h5>
         <Effector type={'distortion'} checked={true}/>
         <Effector type={'vibrato'} checked={false}/>
         <Effector type={'delay'} checked={false}/>

@@ -11,8 +11,8 @@ class Sources extends React.Component {
 
   render() {
     return (
-      <div name="sources">
-        <h5>source</h5>
+      <div name="source">
+        <h5>サウンドソース</h5>
         <MasterGain />
         <SourceMic active={true}/>
         <Source name={'wave'}
