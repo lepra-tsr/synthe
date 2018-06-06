@@ -26,7 +26,10 @@ class Delay extends React.Component {
           onChange={(e) => {
             const v = parseFloat(e);
             const { ctx, delay } = this.audio;
-            delay.delayTime.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+            /* zero is invalid delayTime */
+            if (v !== 0) {
+              delay.delayTime.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+            }
             this.setState({ delayTime: v });
           }}
           min={0}

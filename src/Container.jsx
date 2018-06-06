@@ -16,6 +16,8 @@ class Container extends React.Component {
     };
     return (
       <Card elevation={Elevation.ONE} style={style.card}>
+        {/*<Graph />*/}
+        {/*<canvas id="g" width="300" height="200"/>*/}
         <Sources/>
         <Filters/>
         <Effectors/>

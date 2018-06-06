@@ -23,17 +23,10 @@ window.onload = () => {
 
   return false;
 
-  /* vender-prefix fallback */
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  navigator.getUserMedia =
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia;
-
   const ctx = new AudioContext();
 
-  const $container = document.getElementById('container');
-  const $graph = document.getElementById('graph');
+  const $container = document.getElementById('c');
+  const $graph = document.getElementById('g');
   const WIDTH = $graph.width;
   const HEIGHT = $graph.height;
   const gcx = $graph.getContext('2d');
