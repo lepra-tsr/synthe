@@ -9,6 +9,7 @@ class Instruments {
     const delay = I.getDelay();
     const comp = I.getComp();
     const gainMaster = I.getGainMaster();
+    const analyserMaster = I.getAnalyserMaster();
     const micP = I.attachMic();
     return micP
       .then(() => {
@@ -18,7 +19,8 @@ class Instruments {
         lpf.connect(delay);
         delay.connect(comp);
         comp.connect(gainMaster);
-        gainMaster.connect(ctx.destination);
+        gainMaster.connect(analyserMaster);
+        analyserMaster.connect(ctx.destination);
       })
       .catch((e) => {
         console.error(e);
@@ -28,6 +30,9 @@ class Instruments {
 
   static init() {
     Instruments.ctx = void 0;
+    Instruments.analyser = {
+      master: void 0,
+    };
     Instruments.src = {
       mic: void 0,
       file: void 0,
@@ -186,6 +191,18 @@ class Instruments {
     const comp = ctx.createDynamicsCompressor();
     Instruments.finisher.comp = comp;
     return comp;
+  }
+
+  static getAnalyserMaster() {
+    if (Instruments.analyser.master) {
+      return Instruments.analyser.master;
+    }
+    const ctx = Instruments.getCtx();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 2048;
+
+    Instruments.analyser.master = analyser;
+    return analyser;
   }
 }
 

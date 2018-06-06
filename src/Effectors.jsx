@@ -1,6 +1,7 @@
 import React from 'react';
 import Delay from './Delay.jsx';
 import Effector from './Effector.jsx';
+import Graph from './Graph.jsx';
 
 class Effectors extends React.Component {
   render() {

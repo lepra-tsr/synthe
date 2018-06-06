@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Filter from './Filter.jsx';
 import Lpf from './Lpf.jsx';
+import Graph from './Graph.jsx';
 
 class Filters extends React.Component {
   render() {
