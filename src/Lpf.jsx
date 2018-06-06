@@ -23,6 +23,7 @@ class Lpf extends React.Component {
     return (
       <div>
         <Checkbox checked={this.props.active} label={'High shelf reducer'}/>
+        <p className='pt-text-muted'>threshold[Hz]</p>
         <Slider
           onChange={(e) => {
             const v = parseInt(e, 10);
@@ -36,6 +37,7 @@ class Lpf extends React.Component {
           labelStepSize={400}
           value={this.state.freq}
         />
+        <p className='pt-text-muted'>attenuation[db]</p>
         <Slider
           onChange={(e) => {
             const v = parseInt(e, 10);

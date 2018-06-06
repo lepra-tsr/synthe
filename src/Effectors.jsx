@@ -1,4 +1,5 @@
 import React from 'react';
+import Delay from './Delay.jsx';
 import Effector from './Effector.jsx';
 
 class Effectors extends React.Component {
@@ -6,10 +7,9 @@ class Effectors extends React.Component {
     return (
       <div name="effectors">
         <h5>エフェクタ</h5>
-        <Effector type={'distortion'} checked={true}/>
-        <Effector type={'vibrato'} checked={false}/>
-        <Effector type={'delay'} checked={false}/>
-        <Effector type={'bitCrash'} checked={false}/>
+        {/*<Effector type={'distortion'} checked={true}/>*/}
+        <Delay checked={true}/>
+        {/*<Effector type={'bitCrash'} checked={false}/>*/}
       </div>
     );
   }

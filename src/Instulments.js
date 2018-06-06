@@ -6,17 +6,19 @@ class Instruments {
     const ctx = I.getCtx();
     const gainMic = I.getGainMic();
     const lpf = I.getLpf();
-    const gainMaster = I.getGainMaster();
+    const delay = I.getDelay();
     const comp = I.getComp();
+    const gainMaster = I.getGainMaster();
     const micP = I.attachMic();
     return micP
       .then(() => {
         const mic = I.getSrcMic();
         mic.connect(gainMic);
         gainMic.connect(lpf);
-        lpf.connect(gainMaster);
-        gainMaster.connect(comp);
-        comp.connect(ctx.destination);
+        lpf.connect(delay);
+        delay.connect(comp);
+        comp.connect(gainMaster);
+        gainMaster.connect(ctx.destination);
       })
       .catch((e) => {
         console.error(e);
@@ -163,6 +165,14 @@ class Instruments {
   }
 
   static getDelay() {
+    if (Instruments.filter.delay) {
+      return Instruments.filter.delay;
+    }
+    const ctx = Instruments.getCtx();
+    const delay = ctx.createDelay();
+    delay.delayTime.value = 0;
+    Instruments.filter.delay = delay;
+    return delay;
   }
 
   static getBitCrash() {
