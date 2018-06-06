@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Effector from './Effector.jsx';
 
 class Effectors extends React.Component {

@@ -1,49 +1,54 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Instruments from './Instulments';
+import {
+  Checkbox,
+  Slider,
+} from '@blueprintjs/core';
 
 class Lpf extends React.Component {
   constructor(props) {
     super(props);
+    this.audio = {
+      ctx: Instruments.getCtx(),
+      lpf: Instruments.getLpf(),
+    };
+    this.state = {
+      gain: this.audio.lpf.gain.value,
+      freq: this.audio.lpf.frequency.value,
+    };
+
   }
 
   render() {
     return (
       <div>
-        <label>
-          <input type="checkbox"
-                 onChange={() => {
-                 }}
-                 checked={this.props.checked}
-          />
-          <span>LPF(high shelf reducer)</span>
-        </label>
-        <label>
-          <span>frequency</span>
-          <input type="range"
-                 onChange={() => {
-                 }}
-                 min="10"
-                 max="2000"
-                 step="50"
-                 value="1500"
-          />
-        </label>
-        <label>
-          <span>gain</span>
-          <input type="range"
-                 onChange={(e) => {
-                   const v = parseFloat(e.target.value);
-                   const lpf = Instruments.getLpf();
-                   const ctx = Instruments.getCtx();
-                   lpf.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
-                 }}
-                 min="-25"
-                 max="0"
-                 step="1"
-                 value="-20"
-          />
-        </label>
+        <Checkbox checked={this.props.active} label={'High shelf reducer'}/>
+        <Slider
+          onChange={(e) => {
+            const v = parseInt(e, 10);
+            const { ctx, lpf } = this.audio;
+            lpf.frequency.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+            this.setState({ freq: v });
+          }}
+          min={100}
+          max={2000}
+          stepSize={10}
+          labelStepSize={400}
+          value={this.state.freq}
+        />
+        <Slider
+          onChange={(e) => {
+            const v = parseInt(e, 10);
+            const { ctx, lpf } = this.audio;
+            lpf.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
+            this.setState({ gain: v });
+          }}
+          min={-25}
+          max={-1}
+          stepSize={1}
+          labelStepSize={4}
+          value={this.state.gain}
+        />
       </div>
     );
   }
