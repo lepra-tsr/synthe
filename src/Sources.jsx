@@ -17,23 +17,6 @@ class Sources extends React.Component {
         <MasterGain />
         <Graph id={'g'} width={400} height={150}/>
         <SourceMic active={true}/>
-        {/*<Source name={'wave'}*/}
-                {/*src={true}*/}
-                {/*active={false}*/}
-                {/*config={{ min: 0, max: 1, step: 0.01, value: 0.1 }}*/}
-        {/*/>*/}
-        {/*<Source name={'sine'}*/}
-                {/*src={true}*/}
-                {/*active={false}*/}
-                {/*freq={{ min: 220, max: 880, step: 10, value: 440 }}*/}
-                {/*config={{ min: 0, max: 1, step: 0.01, value: 0.1 }}*/}
-        {/*/>*/}
-        {/*<Source name={'square'}*/}
-                {/*src={true}*/}
-                {/*active={false}*/}
-                {/*freq={{ min: 220, max: 880, step: 10, value: 440 }}*/}
-                {/*config={{ min: 0, max: 1, step: 0.01, value: 0.1 }}*/}
-        {/*/>*/}
       </div>
     );
   }
