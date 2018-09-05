@@ -4,6 +4,7 @@ import MasterGain from './MasterGain.jsx';
 import SourceMic from './SourceMic.jsx';
 import Source from './Source.jsx';
 import Graph from './Graph.jsx';
+import GraphFrequency from './GraphFrequency.jsx';
 
 class Sources extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class Sources extends React.Component {
       <div name="source">
         <h5>サウンドソース</h5>
         <MasterGain />
-        <Graph id={'g'} width={400} height={150}/>
+        <Graph id={'g'} width={600} height={200}/>
+
+        {/* <GraphFrequency id={'f'} width={600} height={200}/> */}
         <SourceMic active={true}/>
       </div>
     );

@@ -4,6 +4,8 @@ class Instruments {
   static connect() {
     const I = Instruments;
     const ctx = I.getCtx();
+    const sine = I.getSrcSine();
+    const gainSine = I.getGainSine();
     const gainMic = I.getGainMic();
     const lpf = I.getLpf();
     const delay = I.getDelay();
@@ -14,6 +16,8 @@ class Instruments {
     return micP
       .then(() => {
         const mic = I.getSrcMic();
+        sine.connect(gainSine);
+        gainSine.connect(lpf);
         mic.connect(gainMic);
         gainMic.connect(lpf);
         lpf.connect(delay);
@@ -112,6 +116,18 @@ class Instruments {
   }
 
   static getSrcSine() {
+    if (Instruments.src && Instruments.src.sine) {
+      return Instruments.src.sine;
+    }
+    const ctx = Instruments.getCtx();
+    const srcSine = ctx.createOscillator();
+    srcSine.type = 'sine';
+    srcSine.frequency.value = 1760;
+    // srcSine.gain.value = 1;
+    Instruments.src.sine = srcSine;
+    srcSine.start();
+
+    return srcSine;
   }
 
   static getSrcSquare() {
@@ -131,6 +147,13 @@ class Instruments {
   }
 
   static getGainSine() {
+    if (Instruments.gain.sine) {
+      return Instruments.gain.sine;
+    }
+    const ctx = Instruments.getCtx();
+    const gainSine = ctx.createGain();
+    Instruments.gain.sine = gainSine;
+    return gainSine;
   }
 
   static getGainSquare() {
@@ -142,6 +165,7 @@ class Instruments {
     }
     const ctx = Instruments.getCtx();
     const gainMaster = ctx.createGain();
+    gainMaster.gain.value = 0.01 // デフォルト
     Instruments.gain.master = gainMaster;
     return gainMaster;
   }
