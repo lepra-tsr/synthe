@@ -1,12 +1,10 @@
 import React from 'react';
-import Delay from './Delay.jsx';
-import Effector from './Effector.jsx';
-import Graph from './Graph.jsx';
+import Delay from './Delay';
 
-class Effectors extends React.Component {
+export default class Effectors extends React.Component {
   render() {
     return (
-      <div name="effectors">
+      <div>
         <h5>エフェクタ</h5>
         {/*<Effector type={'distortion'} checked={true}/>*/}
         <Delay checked={true}/>
@@ -15,5 +13,3 @@ class Effectors extends React.Component {
     );
   }
 }
-
-module.exports = Effectors;

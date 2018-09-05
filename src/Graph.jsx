@@ -6,7 +6,7 @@ import {
 import './handler.css';
 import Instruments from './Instulments.js';
 
-class Graph extends React.Component {
+export default class Graph extends React.Component {
   constructor(props) {
     super(props);
 
@@ -116,5 +116,3 @@ class Graph extends React.Component {
 
   }
 }
-
-module.exports = Graph;

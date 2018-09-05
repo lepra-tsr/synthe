@@ -6,7 +6,7 @@ import {
 import './handler.css';
 import Instruments from './Instulments.js';
 
-class GraphFrequency extends React.Component {
+export default class GraphFrequency extends React.Component {
   constructor(props) {
     super(props);
 
@@ -129,5 +129,3 @@ class GraphFrequency extends React.Component {
 
   }
 }
-
-module.exports = GraphFrequency;

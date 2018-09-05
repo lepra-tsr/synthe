@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitThis": false,
+    "noImplicitAny": false,
+    "alwaysStrict": true,
+    "newLine": "LF",
+    "allowJs": true,
+    "baseUrl": ".",
+    "outDir": "./dist/",
+    "sourceMap": false,
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "module": "es6",
+    "moduleResolution": "node",
+    "target": "es6",
+    "jsx": "react"
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./src/client",
+    "./src/server/schema"
+  ]
+}

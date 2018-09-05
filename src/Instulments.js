@@ -1,6 +1,6 @@
 'use strict';
 
-class Instruments {
+export default class Instruments {
   static connect() {
     const I = Instruments;
     const ctx = I.getCtx();
@@ -229,5 +229,3 @@ class Instruments {
     return analyser;
   }
 }
-
-module.exports = Instruments;

@@ -5,7 +5,21 @@ import {
   Slider,
 } from '@blueprintjs/core';
 
-class Lpf extends React.Component {
+interface ILpfProps {
+  type: string;
+  checked: boolean;
+  active?: boolean;
+}
+interface ILpfState {
+  gain: number;
+  freq: number;
+}
+
+export default class Lpf extends React.Component<ILpfProps, ILpfState> {
+  audio: {
+    ctx: AudioContext;
+    lpf: BiquadFilterNode;
+  }
   constructor(props) {
     super(props);
     this.audio = {
@@ -22,11 +36,10 @@ class Lpf extends React.Component {
   render() {
     return (
       <div>
-        <Checkbox checked={this.props.active} label={'High shelf reducer'}/>
+        <Checkbox checked={this.props.active} label={'High shelf reducer'} />
         <p className='pt-text-muted'>threshold[Hz]</p>
         <Slider
-          onChange={(e) => {
-            const v = parseInt(e, 10);
+          onChange={(v: number) => {
             const { ctx, lpf } = this.audio;
             lpf.frequency.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
             this.setState({ freq: v });
@@ -39,8 +52,7 @@ class Lpf extends React.Component {
         />
         <p className='pt-text-muted'>attenuation[db]</p>
         <Slider
-          onChange={(e) => {
-            const v = parseInt(e, 10);
+          onChange={(v: number) => {
             const { ctx, lpf } = this.audio;
             lpf.gain.exponentialRampToValueAtTime(v, ctx.currentTime + 0.2);
             this.setState({ gain: v });

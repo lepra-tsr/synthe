@@ -27,26 +27,34 @@ const distribute = path.resolve(__dirname, 'public');
 module.exports = {
   mode: 'development',
   entry: {
-    client: `${entryPoint}/client.js`
+    client: `${entryPoint}/client.tsx`
   },
   output: {
     path: distribute,
     filename: '[name].bundle.js',
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.jsx?$/,
         use: [{
           loader: 'babel-loader',
           options: {
             presets: [
-              ['env', { 'modules': false }],
+              ['env', {
+                'modules': false
+              }],
               'react'
             ]
           }
         }],
-        exclude: /(node_modules|src\/api)/,
+        exclude: /(node_modules|src\/server)/,
+      },
+      {
+        test: /\.tsx?$/,
+        use: [
+          'babel-loader', 'ts-loader'
+        ],
+        exclude: /(node_modules)/,
       },
       {
         test: /\.css$/,
@@ -76,7 +84,7 @@ module.exports = {
   },
   // devtool: 'source-map',
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
-  plugins: []
+  // plugins: []
 };
