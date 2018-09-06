@@ -11,6 +11,10 @@ class Content extends React.Component {
         width: '80%',
         display: 'flex',
         marginLeft: '10%',
+      },
+      canvas: {
+        width: '80%',
+        height: '300px',
       }
     };
     return (
@@ -20,6 +24,8 @@ class Content extends React.Component {
         </head>
         <body>
           <div id="container" style={style.container}></div>
+          <div id="micSwitch"></div>
+          <canvas id="graph" style={style.graph}></canvas>
           <script type="text/javascript" src="./client.bundle.js"></script>
         </body>
       </html>
