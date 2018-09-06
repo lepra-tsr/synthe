@@ -27,7 +27,8 @@ const distribute = path.resolve(__dirname, 'public');
 module.exports = {
   mode: 'development',
   entry: {
-    client: `${entryPoint}/client.tsx`
+    client: `${entryPoint}/client.tsx`,
+    ['audio.worker']: `${entryPoint}/audio.worker.js`,
   },
   output: {
     path: distribute,
@@ -35,7 +36,7 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: /\.jsx?$/,
+        test: /(?<!\.worker)\.jsx?$/,
         use: [{
           loader: 'babel-loader',
           options: {
@@ -47,7 +48,7 @@ module.exports = {
             ]
           }
         }],
-        exclude: /(node_modules|src\/server)/,
+        exclude: /(node_modules)/,
       },
       {
         test: /\.tsx?$/,

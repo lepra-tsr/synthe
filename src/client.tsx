@@ -4,27 +4,34 @@ import { ChangeEvent } from "react";
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import Container from './Container';
-// import Instruments from './Instulments';
 
-window.onload = () => {
-  App.init();
-  const graph = document.getElementById('graph');
-  if (!(graph instanceof HTMLCanvasElement)) {
-    throw new Error('cannot get canvas element.')
-  }
-  Drawer.init(graph);
-  const container = document.getElementById('container');
-  ReactDOM.render(<WaveFilePicker />, container);
-  const micSwitch = document.getElementById('micSwitch');
-  ReactDOM.render(<MicSwitch />, micSwitch);
-}
+document.addEventListener('DOMContentLoaded', () => {
+
+  const context = new AudioContext();
+  context.audioWorklet.addModule('audio.worker.bundle.js')
+    .then(() => {
+      const bypassNode = new AudioWorkletNode(context, 'bypass');
+
+      App.init(context, bypassNode);
+      const graph = document.getElementById('graph');
+      if (!(graph instanceof HTMLCanvasElement)) {
+        throw new Error('cannot get canvas element.')
+      }
+      Drawer.init(graph);
+      const container = document.getElementById('container');
+      ReactDOM.render(<WaveFilePicker />, container);
+      const micSwitch = document.getElementById('micSwitch');
+      ReactDOM.render(<MicSwitch />, micSwitch);
+    })
+}, false);
 
 class App {
   static cx: AudioContext;
   static animationId: number;
-  static init() {
-    App.cx = new AudioContext();
+  static bypassNode: AudioWorkletNode;
+  static init(context, bypassNode: AudioWorkletNode) {
+    App.cx = context;
+    App.bypassNode = bypassNode
   }
   static readWaveFile(audioFile: File) {
     const fr: FileReader = new FileReader();
@@ -44,18 +51,21 @@ class App {
 
   private static analyseSoundSource(node: MediaStreamAudioSourceNode | AudioBufferSourceNode) {
 
-    const analyser = App.cx.createAnalyser();
-    const scriptProcessor = App.cx.createScriptProcessor(analyser.fftSize, 1, 1);
-    node.connect(analyser);
+    // const analyser = App.cx.createAnalyser();
+    // const scriptProcessor = App.cx.createScriptProcessor(analyser.fftSize, 1, 1);
 
-    analyser.connect(scriptProcessor);
-    scriptProcessor.connect(App.cx.destination);
+    node.connect(App.bypassNode);
+    App.bypassNode.connect(App.cx.destination);
+    return false;
+    // node.connect(App.bypassNode);
+    // App.bypassNode.connect(analyser);
+    // analyser.connect(scriptProcessor);
+    // scriptProcessor.connect(App.cx.destination);
+    // scriptProcessor.onaudioprocess = App.onAudioProcessHandler.bind(this, analyser);
 
-    scriptProcessor.onaudioprocess = App.onAudioProcessHandler.bind(this, analyser);
-
-    if (node instanceof AudioBufferSourceNode) {
-      node.start(0);
-    }
+    // if (node instanceof AudioBufferSourceNode) {
+    //   node.start(0);
+    // }
   }
 
   static async connectMic() {
