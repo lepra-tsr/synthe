@@ -12,9 +12,10 @@ class Content extends React.Component {
         display: 'flex',
         marginLeft: '10%',
       },
-      canvas: {
-        width: '80%',
-        height: '300px',
+      graph: {
+        width: '256px',
+        height: '256px',
+        border: '1px solid lightgray',
       }
     };
     return (
@@ -25,6 +26,7 @@ class Content extends React.Component {
         <body>
           <div id="container" style={style.container}></div>
           <div id="micSwitch"></div>
+          <div id="oscillatorSwitch"></div>
           <canvas id="graph" style={style.graph}></canvas>
           <script type="text/javascript" src="./client.bundle.js"></script>
         </body>
