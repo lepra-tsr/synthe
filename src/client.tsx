@@ -6,11 +6,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const ANALYSE_FFT_SIZE = 2048;
-const SINE_FREQUENCY = 3520;
+const SINE_FREQUENCY = 4400;
 const OSCILLATOR_TYPE = 'sine';
-const CEILING_FREQUENCY = 22000;
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
 
   const context = new AudioContext();
   context.audioWorklet.addModule('audio.worker.bundle.js')
@@ -117,8 +116,12 @@ class App {
     if (!!App.animationId) {
       window.cancelAnimationFrame(App.animationId)
     }
+
     App.animationId = window.requestAnimationFrame(() => {
-      App.drawFrequencyDomain(powerArray);
+      const validLength = 512;
+      const validPowerArray = powerArray.slice(0, validLength);
+
+      App.drawFrequencyDomain(validPowerArray);
       delete App.animationId;
     })
   }
@@ -223,8 +226,11 @@ class Drawer {
     const cx = canvas.getContext('2d');
     if (!(cx instanceof CanvasRenderingContext2D)) { return false }
     Drawer.cx = cx;
-    Drawer.width = canvas.width;
-    Drawer.height = canvas.height;
+    if (!canvas.style.width || !canvas.style.height) {
+      throw new Error('cant get canvas size');
+    }
+    Drawer.width = parseInt(canvas.style.width, 10);
+    Drawer.height = parseInt(canvas.style.height, 10);
     Drawer.currentX = 0;
   }
 
@@ -253,35 +259,34 @@ class Drawer {
   }
 
   static updateFrequency(powerArray: Uint8Array) {
-    const { cx, width, height, currentX, flush } = Drawer;
     const { sampleRate } = App;
-
-    const blockSize = 4;
+    const { cx, width, height, currentX, flush } = Drawer;
+    const blockSize: number = Math.floor(powerArray.length / height);
 
     if (width < currentX) {
       flush();
     }
 
-    /* @TODO drop redundant spectral data */
+    const plotty: number[] = []
     for (let i = 0; i < powerArray.length; i += blockSize) {
-      const [p0, p1, p2, p3] = powerArray.slice(i, i + blockSize);
-      const power: number = (p0 + p1 + p2 + p3) / blockSize;
-      const _plotY: number = (height - (height * (i / powerArray.length)));
+      const powerBlockArray = powerArray.slice(i, i + blockSize);
+      const power: number = Math.floor(powerBlockArray.reduce((x, y) => x + y) / blockSize);
+      const _plotY: number = (height - (height * (i / powerArray.length)))/2;
       const plotY = Math.floor(_plotY);
-      if ((currentX % 100 === 0) && (i % 100 === 0)) {
-        const hertz = (i / powerArray.length) * sampleRate;
+      plotty.push(plotY);
+      if ((currentX % 100 === 0) && (i % 50 === 0)) {
+        const hertz = Math.floor((i / powerArray.length) * (sampleRate / 2*2));
         cx.fillStyle = 'red';
         cx.font = '9px "consolas"'
-        cx.fillText(`${hertz}Hz`, currentX-100, plotY);
+        cx.fillText(`${hertz}Hz`, currentX - 100, plotY);
       }
-      const e: number = 255 - power;
-      cx.fillStyle = `rgb(${e}, ${e}, ${e})`
-      cx.fillRect(currentX, plotY, 1, 1);
+      if (power !== 0) {
+        cx.fillStyle = `rgb(0, ${plotY}, ${power})`;
+        cx.fillRect(currentX, plotY, 1, 1);
+      }
     }
 
-    cx.fillStyle = '#000000';
-    cx.fillRect(currentX, height - 1, 1, 1);
-
+    // console.log(currentX, Math.min(...plotty), powerArray.length, height, blockSize);
     this.currentX++;
   }
 }
