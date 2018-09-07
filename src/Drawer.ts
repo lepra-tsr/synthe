@@ -33,8 +33,8 @@ export default class Drawer {
   }
 
   static flush() {
-    // const { cx, width, height } = Drawer;
-    // cx.clearRect(0, 0, width, height);
+    const { cx, width, height } = Drawer;
+    cx.clearRect(0, 0, width, height);
     Drawer.currentX = 0;
   }
 
@@ -71,5 +71,27 @@ export default class Drawer {
     }
 
     this.currentX++;
+  }
+
+  static updateLevels(_powerArray: Uint8Array) {
+    const { cx, width, height, flush } = Drawer;
+    const VALID_LENGTH = App.ceilIndexFFT;
+    const powerArray = _powerArray.slice(0, VALID_LENGTH);
+    const validLength = powerArray.length;
+    const arrayPerPixel: number = Math.floor(validLength / height);
+
+    flush();
+
+    for (let i = 0; i < validLength; i++) {
+      if (i % arrayPerPixel !== 0) { continue }
+      const progress = (i / validLength);
+      const powerBlockArray = powerArray.slice(i, i + arrayPerPixel);
+      const power: number = Math.floor(powerBlockArray.reduce((x, y) => x + y) / arrayPerPixel);
+      const plotX = (width * progress);
+      const satuation = 60 * (i / validLength) + 20;
+      const level = power;
+      cx.fillStyle = `hsl(200, ${satuation}%, 80%)`;
+      cx.fillRect(plotX, 0, 1, level);
+    }
   }
 }

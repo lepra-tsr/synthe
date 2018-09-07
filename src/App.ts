@@ -2,7 +2,7 @@ import Drawer from './Drawer';
 
 export const ANALYSE_FFT_SIZE = 2048;
 const CEIL_FREQUENCY_THRESHOULD = 20 * 1000;
-const SINE_FREQUENCY = 12900;
+const SINE_FREQUENCY = 440;
 const OSCILLATOR_TYPE = 'sine';
 
 export default class App {
@@ -128,6 +128,7 @@ export default class App {
   }
 
   static drawFrequencyDomain(powerArray: Uint8Array) {
-    Drawer.updateFrequency(powerArray);
+    // Drawer.updateFrequency(powerArray);
+    Drawer.updateLevels(powerArray);
   }
 }
