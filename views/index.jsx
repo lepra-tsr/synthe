@@ -13,11 +13,11 @@ class Content extends React.Component {
         marginLeft: '10%',
       },
       graph: {
-        width: '256px',
-        height: '256px',
         border: '1px solid lightgray',
       }
     };
+    const cWidth = 256;
+    const cHeight = 256;
     return (
       <html>
         <head>
@@ -27,7 +27,7 @@ class Content extends React.Component {
           <div id="container" style={style.container}></div>
           <div id="micSwitch"></div>
           <div id="oscillatorSwitch"></div>
-          <canvas id="graph" style={style.graph}></canvas>
+          <canvas id="graph" width={cWidth} height={cHeight} style={style.graph}></canvas>
           <script type="text/javascript" src="./client.bundle.js"></script>
         </body>
       </html>
