@@ -16,8 +16,8 @@ class Content extends React.Component {
         border: '1px solid lightgray',
       }
     };
-    const cWidth = 256;
-    const cHeight = 256;
+    const cWidth = 512;
+    const cHeight = 512;
     return (
       <html>
         <head>

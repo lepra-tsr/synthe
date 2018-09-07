@@ -1,18 +1,33 @@
 import Drawer from './Drawer';
 
-export const ANALYSE_FFT_SIZE = 1024;
-const SINE_FREQUENCY = 440;
-const OSCILLATOR_TYPE = 'triangle';
+export const ANALYSE_FFT_SIZE = 2048;
+const CEIL_FREQUENCY_THRESHOULD = 20 * 1000;
+const SINE_FREQUENCY = 12900;
+const OSCILLATOR_TYPE = 'sine';
 
 export default class App {
   static cx: AudioContext;
   static sampleRate: number;
+  static ceilFrequency: number;
+  static ceilIndexFFT: number;
   static animationId: number;
   static bypassNode: AudioWorkletNode;
   static init(context, bypassNode: AudioWorkletNode) {
     App.cx = context;
     App.sampleRate = context.sampleRate;
-    App.bypassNode = bypassNode
+    App.bypassNode = bypassNode;
+    App.calculateCeilFrequency();
+  }
+  static calculateCeilFrequency() {
+    const { sampleRate } = App;
+    for (let i = 0; i < ANALYSE_FFT_SIZE; i++) {
+      const f = sampleRate * (i / ANALYSE_FFT_SIZE)
+      if (f > CEIL_FREQUENCY_THRESHOULD) {
+        App.ceilFrequency = Math.floor(f);
+        App.ceilIndexFFT = i;
+        break;
+      }
+    }
   }
   static readWaveFile(audioFile: File) {
     const fr: FileReader = new FileReader();

@@ -33,8 +33,8 @@ export default class Drawer {
   }
 
   static flush() {
-    const { cx, width, height } = Drawer;
-    cx.clearRect(0, 0, width, height);
+    // const { cx, width, height } = Drawer;
+    // cx.clearRect(0, 0, width, height);
     Drawer.currentX = 0;
   }
 
@@ -42,20 +42,18 @@ export default class Drawer {
     const { sampleRate } = App;
     const { cx, width, height, currentX, flush } = Drawer;
     const rawLength = ANALYSE_FFT_SIZE;
-    const VALID_LENGTH = 512; // 人間の可聴域
+    const VALID_LENGTH = App.ceilIndexFFT;
     const powerArray = _powerArray.slice(0, VALID_LENGTH);
     const validLength = powerArray.length;
-    const arrayPerPixel: number = Math.floor(VALID_LENGTH / height);
-    const frequencyCeil = Math.floor(sampleRate * (VALID_LENGTH / rawLength));
+    const arrayPerPixel: number = Math.floor(validLength / height);
+    const frequencyCeil = Math.floor(sampleRate * (validLength / rawLength));
 
     if (width < currentX) {
       flush();
     }
 
     for (let i = 0; i < validLength; i++) {
-      if (i % arrayPerPixel !== 0) {
-        continue;
-      }
+      if (i % arrayPerPixel !== 0) { continue; }
       const progress = (i / validLength);
       const powerBlockArray = powerArray.slice(i, i + arrayPerPixel);
       const power: number = Math.floor(powerBlockArray.reduce((x, y) => x + y) / arrayPerPixel);
