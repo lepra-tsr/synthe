@@ -11,7 +11,7 @@ export default class MicSwitch extends React.Component<{}, { enabled: boolean }>
   render() {
     return (
       <div>
-        <input disabled={!this.state.enabled} type="button" value="mic on" onClick={this.onClickHandler.bind(this)} />
+        <input disabled={!this.state.enabled} type="button" value="マイク入力の周波数成分を表示" onClick={this.onClickHandler.bind(this)} />
       </div>
     )
   }

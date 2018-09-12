@@ -2,7 +2,7 @@ import Drawer from './Drawer';
 
 export const ANALYSE_FFT_SIZE = 2048;
 const CEIL_FREQUENCY_THRESHOULD = 20 * 1000;
-const SINE_FREQUENCY = 4400;
+const SINE_FREQUENCY = 440;
 const OSCILLATOR_TYPE = 'sine';
 
 export default class App {
@@ -11,11 +11,9 @@ export default class App {
   static ceilFrequency: number;
   static ceilIndexFFT: number;
   static animationId: number;
-  static bypassNode: AudioWorkletNode;
-  static init(context, bypassNode: AudioWorkletNode) {
+  static init(context) {
     App.cx = context;
     App.sampleRate = context.sampleRate;
-    App.bypassNode = bypassNode;
     App.calculateCeilFrequency();
   }
   static calculateCeilFrequency() {
@@ -51,8 +49,7 @@ export default class App {
     analyser.fftSize = ANALYSE_FFT_SIZE;
     const scriptProcessor = App.cx.createScriptProcessor(analyser.fftSize, 1, 1);
 
-    node.connect(App.bypassNode);
-    App.bypassNode.connect(analyser);
+    node.connect(analyser);
     analyser.connect(scriptProcessor);
     scriptProcessor.connect(App.cx.destination);
     scriptProcessor.onaudioprocess = App.onAudioProcessHandler.bind(this, analyser);

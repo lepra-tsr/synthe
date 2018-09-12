@@ -11,7 +11,7 @@ export default class OscillatorSwitch extends React.Component<{}, { enabled: boo
   render() {
     return (
       <div>
-        <input disabled={!this.state.enabled} type="button" value="sine on" onClick={this.onClickHandler.bind(this)} />
+        <input disabled={!this.state.enabled} type="button" value="440Hzの正弦波を表示" onClick={this.onClickHandler.bind(this)} />
       </div>
     )
   }
