@@ -9,6 +9,15 @@
   <div id="micSwitch"></div>
   <div id="oscillatorSwitch"></div>
   <canvas id="graph" width="512" height="512" style="border: 1px solid lightgray"></canvas>
+  <div style="font-size:0.8em;">
+    <p>音声入力をFFT(高速フーリエ変換)で時間ドメインから周波数ドメインに変換してCanvasに描画します</p>
+    <p>要するにその音に含まれる高さの音について、強さを緑色の濃さに変換します</p>
+    <p>入力は「音声ファイル」「マイク」「440Hz(ラ)の正弦波」が選べます</p>
+    <p>描画領域はヒトの可聴域である〜20kHzに制限してます</p>
+    <p>ヒトの440Hzの声と、機械が生成した440Hzの音</p>
+    <p>どちらも同じ高さのはずなのに、どうして違う音になるのか？というやつです</p>
+    <p>動かなかったらChromeで見てください それでもだめだったらごめんなさい</p>
+  </div>
   <script type="text/javascript" src="./public/client.bundle.js"></script>
 </body>
 
