@@ -58,12 +58,12 @@ export default class Drawer {
       const powerBlockArray = powerArray.slice(i, i + arrayPerPixel);
       const power: number = Math.floor(powerBlockArray.reduce((x, y) => x + y) / arrayPerPixel);
       const _plotY: number = (height * progress);
-      const plotY = Math.floor(_plotY);
-      if ((currentX % 50 === 0) && (i % 50 === 0)) {
+      const plotY = height - Math.floor(_plotY);
+      if ((currentX % 100 === 0) && (i % 50 === 0)) {
         const hertz = Math.floor(progress * frequencyCeil);
-        cx.fillStyle = 'lightGray';
+        cx.fillStyle = 'gray';
         cx.font = '9px "consolas"'
-        cx.fillText(`${hertz}Hz`, currentX - 100, plotY);
+        cx.fillText(`${hertz}Hz`, currentX, plotY);
       }
       const c = (power / 255);
       cx.fillStyle = `rgba(0,180,150,${c})`;
